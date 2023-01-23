@@ -1,25 +1,38 @@
 import { useState } from "react"
-
-import { Circle, Trash, CheckCircle } from "phosphor-react"
+import { Trash, Check } from "phosphor-react"
+import * as Checkbox from '@radix-ui/react-checkbox';
 
 import styles from "./Task.module.css"
 
-export function Task(){
+interface newTaskProps {
+    description: string
+    isComplete: boolean
+    onDeleteTask: (task: string) => void
+}
 
-    const [icon, setIcon] = useState(true);
+export function Task({ description, onDeleteTask, isComplete }: newTaskProps) {
 
-    return(
-        <div className={styles.hasTask}>
-                    <div className={styles.taskModel}>
-                        <div className={styles.isComplete} onClick={() => setIcon(!icon)}>
-                            {icon ? <Circle /> : <CheckCircle />}
-                        </div>
-                        <p>alguma coisa aqui antes patrão</p>
+    function handleDeleteTask() {
+        onDeleteTask(description);
+    }
 
-                        <button>
-                            <Trash size={18}/>
-                        </button>
-                    </div>
+    function handleTaskComplete(){
+        isComplete = !isComplete;
+    }
+
+    return (
+        <div className={isComplete ? styles.hasTask : styles.hasTaskDone}>
+            <div className={styles.taskModel}>
+                <div className={styles.isComplete} onClick={handleTaskComplete}>
+                    <Check size={30} />
                 </div>
+
+                <p>{description}</p>
+
+                <button onClick={handleDeleteTask}>
+                    <Trash size={18} />
+                </button>
+            </div>
+        </div>
     )
 }
