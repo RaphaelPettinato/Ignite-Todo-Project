@@ -6,6 +6,8 @@ import { ChangeEvent, FormEvent, useState } from "react"
 import { Task } from "./Task";
 import { PlusCircle } from "phosphor-react";
 
+import { v4 as uuidv4 } from 'uuid';
+
 interface Content {
     descricao: string
 }
@@ -13,9 +15,10 @@ interface Content {
 interface TaskProps {
     content: Content[];
     isComplete: boolean;
+    id: string
 }
 
-export function TaskControl({ isComplete }: TaskProps) {
+export function TaskControl({ id }: TaskProps) {
 
     const [tasks, setTasks] = useState<string[]>([]);
 
@@ -85,10 +88,10 @@ export function TaskControl({ isComplete }: TaskProps) {
                     tasks.map(task => {
                         return (
                             <Task
-                                key={task}
+                                id={uuidv4.toString()}
                                 description={task}
                                 onDeleteTask={deleteTask}
-                                isComplete={completeTask}
+                                isComplete
                             />
                         )
                     })

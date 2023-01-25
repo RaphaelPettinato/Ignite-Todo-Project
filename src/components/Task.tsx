@@ -5,15 +5,16 @@ import * as Checkbox from '@radix-ui/react-checkbox';
 import styles from "./Task.module.css"
 
 interface newTaskProps {
+    id: string,
     description: string
     isComplete: boolean
     onDeleteTask: (task: string) => void
 }
 
-export function Task({ description, onDeleteTask, isComplete }: newTaskProps) {
+export function Task({ description, onDeleteTask, isComplete, id }: newTaskProps) {
 
     function handleDeleteTask() {
-        onDeleteTask(description);
+        onDeleteTask(id);
     }
 
     function handleTaskComplete(){

@@ -132,3 +132,63 @@
 .createTaskButton:not(:disabled):hover {
     background: var(--blue);
 }
+
+.hasTask {
+    margin-top: 1.5rem
+}
+
+.hasTask button{
+    background: transparent;
+    color: var(--gray-300);
+    border: 0;
+
+    cursor: pointer;
+}
+
+.hasTask button:hover{
+    color: var(--danger);
+    transition: 0.2s;
+}
+
+.hasTask p {
+    font-size: 0.875rem;
+    color: var(--gray-100);
+    line-break: anywhere;
+}
+
+.hasTaskDone {
+    margin-top: 1.5rem
+}
+
+.hasTaskDone button{
+    background: transparent;
+    color: var(--gray-300);
+    border: 0;
+
+    cursor: pointer;
+}
+
+.hasTaskDone button:hover{
+    color: var(--danger);
+    transition: 0.2s;
+}
+
+.hasTaskDone p {
+    font-size: 0.875rem;
+    color: var(--gray-300);
+    line-break: anywhere;
+
+    text-decoration-line: line-through;
+}
+
+.taskModel {
+    display: flex;
+    justify-content: space-between;
+    background: var(--gray-500);
+    border-radius: 8px;
+    align-items: flex-start;
+
+    padding: 1rem;
+
+    gap: 0.75rem;
+}
