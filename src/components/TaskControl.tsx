@@ -1,71 +1,53 @@
 import styles from "./TaskControl.module.css"
-
 import Clipboard from "../assets/Clipboard.svg"
-
-import { ChangeEvent, FormEvent, useState } from "react"
 import { Task } from "./Task";
 import { PlusCircle } from "phosphor-react";
 
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuid } from 'uuid';
+import { ChangeEvent, FormEvent, useState } from "react";
 
-interface Content {
-    descricao: string
-}
+export function TaskControl() {
+    const [tasks, setTasks] = useState<string[]>([])
 
-interface TaskProps {
-    content: Content[];
-    isComplete: boolean;
-    id: string
-}
+    const id = '1'
 
-export function TaskControl({ id }: TaskProps) {
+    const [newTaskComment, setNewTaskComment] = useState('')
 
-    const [tasks, setTasks] = useState<string[]>([]);
-
-    const [finished, setFinished] = useState(0)
-
-    const [newDescriptionTask, setNewDescriptionTask] = useState('');
-
-    function handleChangeDescriptionTask(event: ChangeEvent<HTMLInputElement>) {
-        event.target.setCustomValidity('')
-        setNewDescriptionTask(event.target.value)
-    }
-
-    function handleCreateNewTask(event: FormEvent) {
+    function handleCreateTask(event: FormEvent){
         event.preventDefault();
 
-        setTasks([...tasks, newDescriptionTask]);
-        setNewDescriptionTask('');
-
-        console.log(tasks)
+        setTasks([...tasks, newTaskComment])
+        setNewTaskComment('');
     }
 
-    function deleteTask(taskToDelete: string) {
+    function handleNewTaskInputChange(event: ChangeEvent<HTMLInputElement>) {
+        event.target.setCustomValidity("")
+        setNewTaskComment(event.target.value)
+    }
+
+    function deleteTask(taskToDelete: string){
         const tasksWithoutDeletedOne = tasks.filter(task => {
             return task !== taskToDelete;
         })
 
-        setTasks(tasksWithoutDeletedOne);
+        setTasks(tasksWithoutDeletedOne)
     }
 
-    function completeTask(completed:boolean){
-        
-    }
-
-    const isInputTextEmpty = newDescriptionTask.length === 0;
+    const isNewTaskInputEmpty = newTaskComment.length === 0
 
     return (
         <div>
-            <form onSubmit={handleCreateNewTask} className={styles.formCreateTask}>
+            <form onSubmit={handleCreateTask} className={styles.formCreateTask}>
                 <input
                     type="text"
                     placeholder="Adicione uma nova tarefa"
-                    value={newDescriptionTask}
-                    onChange={handleChangeDescriptionTask}
+                    onChange={handleNewTaskInputChange}
+                    value={newTaskComment}
+                    required
                 />
                 <button
                     type="submit"
-                    disabled={isInputTextEmpty}
+                    disabled={isNewTaskInputEmpty}
                     className={styles.createTaskButton}
                 >
                     Criar <PlusCircle />
@@ -79,26 +61,25 @@ export function TaskControl({ id }: TaskProps) {
 
                 <div className={styles.taskCompleted}>
                     <p>Concluídas</p>
-                    <span> {finished} de {tasks.length} </span>
+                    <span>  de {tasks.length} </span>
                 </div>
             </div>
 
             <div className={styles.tasksView}>
-                {
-                    tasks.map(task => {
+                    {tasks.map(task => {
                         return (
                             <Task
-                                id={uuidv4.toString()}
-                                description={task}
+                                key={id}
+                                id={id}
+                                content={task}
+                                isFinished={true}
                                 onDeleteTask={deleteTask}
-                                isComplete
                             />
                         )
-                    })
-                }
+                    })}
                 <div className={tasks.length === 0 ? styles.taskIsNoneTrue : styles.taskIsNone}>
                     <img src={Clipboard} />
-                    <strong>Você ainda não tem tarefas cadastradas</strong>
+                        <strong>Você ainda não tem tarefas cadastradas</strong>
                     <p>Crie tarefas e organize seus itens a fazer</p>
                 </div>
             </div>

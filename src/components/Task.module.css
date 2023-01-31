@@ -19,6 +19,8 @@
     font-size: 0.875rem;
     color: var(--gray-100);
     line-break: anywhere;
+
+    padding-right: 3.3rem;
 }
 
 .hasTaskDone {
