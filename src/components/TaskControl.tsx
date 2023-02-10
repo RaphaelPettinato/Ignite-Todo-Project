@@ -2,35 +2,34 @@ import styles from "./TaskControl.module.css"
 import Clipboard from "../assets/Clipboard.svg"
 import { Task } from "./Task";
 import { PlusCircle } from "phosphor-react";
-
 import { v4 as uuid } from 'uuid';
 import { ChangeEvent, FormEvent, useState } from "react";
+import { ITask } from "../App";
 
-export function TaskControl() {
-    const [tasks, setTasks] = useState<string[]>([])
+interface TaskProps {
+    tasks: ITask[],
+    onHandleCreateTask: (content: string) => void 
+    onDeleteTask: (id: string) => void
+    onCompleteTask: (id: string) => void
+}
 
-    const id = '1'
-
+export function TaskControl({ tasks, onHandleCreateTask, onDeleteTask, onCompleteTask } : TaskProps) {
     const [newTaskComment, setNewTaskComment] = useState('')
+
+    const tasksToDoYet = tasks.length;
+    const tasksDone = tasks.filter((task) => task.isFinished).length
 
     function handleCreateTask(event: FormEvent){
         event.preventDefault();
 
-        setTasks([...tasks, newTaskComment])
         setNewTaskComment('');
+
+        onHandleCreateTask(newTaskComment)
     }
 
     function handleNewTaskInputChange(event: ChangeEvent<HTMLInputElement>) {
         event.target.setCustomValidity("")
         setNewTaskComment(event.target.value)
-    }
-
-    function deleteTask(taskToDelete: string){
-        const tasksWithoutDeletedOne = tasks.filter(task => {
-            return task !== taskToDelete;
-        })
-
-        setTasks(tasksWithoutDeletedOne)
     }
 
     const isNewTaskInputEmpty = newTaskComment.length === 0
@@ -56,24 +55,23 @@ export function TaskControl() {
             <div className={styles.taskMade}>
                 <div className={styles.taskCreated}>
                     <p>Tarefas Criadas</p>
-                    <span> {tasks.length} </span>
+                    <span> {tasksToDoYet} </span>
                 </div>
 
                 <div className={styles.taskCompleted}>
                     <p>Concluídas</p>
-                    <span>  de {tasks.length} </span>
+                    <span> {tasksDone} de {tasksToDoYet} </span>
                 </div>
             </div>
 
             <div className={styles.tasksView}>
                     {tasks.map(task => {
                         return (
-                            <Task
-                                key={id}
-                                id={id}
-                                content={task}
-                                isFinished={true}
-                                onDeleteTask={deleteTask}
+                            <Task 
+                                key={task.id} 
+                                task={task} 
+                                onDeleteTask={onDeleteTask}
+                                onCompleteTask={onCompleteTask}
                             />
                         )
                     })}
